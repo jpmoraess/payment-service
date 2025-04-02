@@ -29,7 +29,9 @@ jobs:
 
       - name: Build Application .jar
         working-directory: ./
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
       - name: Build Docker Image
         working-directory: ./
