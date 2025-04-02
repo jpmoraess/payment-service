@@ -64,15 +64,14 @@ jobs:
 
       - name: Tag and Push Docker Image to AWS ECR
         run: |
-          ECR_REPOSITORY="443370689665.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/jpmoraess"
           IMAGE_NAME="payment-service"
           IMAGE_TAG="${GITHUB_SHA}"
 
-          docker tag $IMAGE_NAME:latest $ECR_REPOSITORY:latest
-          docker push $ECR_REPOSITORY:latest
+          docker tag $IMAGE_NAME:latest ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
+          docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-            docker tag $IMAGE_NAME:$IMAGE_TAG $ECR_REPOSITORY:$TAG
-            docker push $ECR_REPOSITORY:$TAG
+            docker tag $IMAGE_NAME:$IMAGE_TAG ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
+            docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
           fi
