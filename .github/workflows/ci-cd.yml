@@ -66,11 +66,12 @@ jobs:
         run: |
           IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/payment-service"
           IMAGE_TAG="${GITHUB_SHA}"
-          docker tag $IMAGE_NAME:latest ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
-          docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
+          
+          docker tag $IMAGE_NAME:latest ${{ secrets.IMAGE_REPOSITORY_URL }}/payment-service:latest
+          docker push ${{ secrets.IMAGE_REPOSITORY_URL }}/payment-service:latest
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-            docker tag $IMAGE_NAME:$IMAGE_TAG ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
-            docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
+            docker tag $IMAGE_NAME:$IMAGE_TAG ${{ secrets.IMAGE_REPOSITORY_URL }}/payment-service:$TAG
+            docker push ${{ secrets.IMAGE_REPOSITORY_URL }}/payment-service:$TAG
           fi
