@@ -64,7 +64,7 @@ jobs:
 
       - name: Tag and Push Docker Image to AWS ECR
         run: |
-          IMAGE_NAME="payment-service"
+          IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/payment-service"
           IMAGE_TAG="${GITHUB_SHA}"
 
           docker tag $IMAGE_NAME:latest ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
