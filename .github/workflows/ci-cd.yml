@@ -44,6 +44,8 @@ jobs:
           IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/payment-service"
           
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$IMAGE_TAG
 
       - name: Push Image to Docker Hub
         run: |
