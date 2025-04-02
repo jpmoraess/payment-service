@@ -6,8 +6,8 @@ on:
       - "main"
       - "master"
       - "ft/aws-ecr"
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+#    tags:
+#      - '[0-9]+.[0-9]+.[0-9]+'
   pull_request:
     branches:
       - "main"
@@ -39,37 +39,31 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Docker Image
-        working-directory: ./
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }} .
-          
           docker tag ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/payment-service:latest
           
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-            docker tag ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/payment-service:$TAG
-          fi
+#          if [[ $GITHUB_REF == refs/tags/* ]]; then
+#            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+#            docker tag ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/payment-service:$TAG
+#          fi
 
       - name: Push Image to Docker Hub Container Registry
-        working-directory: ./
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }}
-          
           docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:latest
           
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-            docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:$TAG
-          fi
+#          if [[ $GITHUB_REF == refs/tags/* ]]; then
+#            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+#            docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:$TAG
+#          fi
 
       - name: Tag and Push Docker Image to AWS ECR
-        working-directory: ./
         run: |
           docker tag ${{ secrets.DOCKER_USERNAME }}/payment-service:latest ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
-
           docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:latest
 
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-            docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
-          fi
+#          if [[ $GITHUB_REF == refs/tags/* ]]; then
+#            TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+#            docker push ${{ secrets.IMAGE_REPOSITORY_URL }}:$TAG
+#          fi
